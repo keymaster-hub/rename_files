@@ -1,6 +1,35 @@
 import os
 
 
+
+def exchange():
+    """
+    Возвращает список имен .tif файлов для которых есть - имя-ЗАМЕНА
+    """
+    exchange = []
+    for name in os.listdir():
+        if 'ЗАМЕНА' in name and ''.join(name.split())[:-11]+'.tif' in os.listdir():
+            exchange.append(''.join(name.split())[:-11]+'.tif')
+    return exchange        
+
+def ask_user():
+    print(*exchange())
+    check = str(input('Delete files? Y/N:\n')).lower().strip()
+    try:
+        if check[0] == 'y':
+            return True
+        elif check[0] == 'n':
+            return False
+        else:
+            print('Invalid Input')
+            return ask_user()
+    except Exception as error:
+        print("Please enter valid inputs")
+        print(error)
+        return ask_user()
+
+
+
 def find_wrong_names():
     """
     Возвращает список *.tif файлов в текущей папке
@@ -16,11 +45,12 @@ def find_wrong_names():
             tif_list.insert(pos, i)
             pos += 1
     pos = 0
-    #Создаем список файлов где после 1 символа меньше 6 цифр
+    #Создаем список файлов где после 1 символа меньше 6 цифр или 1 символ lower case
     for i in tif_list:
-        if (str(i)[1:7]).isdigit() is False: 
+        if (str(i)[1:7]).isdigit() is False: #Меньше 6 цифр - в список
             wrong_list.insert(pos, i)
-            
+        elif (str(i)[0]).isupper() is False: #1 символ нижний регистр - в список
+            wrong_list.insert(pos, i)
     return wrong_list
 
 
@@ -43,7 +73,7 @@ def rename_files():
             paste = 6 - num_count        #Сколько единиц вставить
             paste_str = str('1') * paste #Строка из единиц
             wrong_list_1.append(i)       #Добавляем старое имя файла
-            wrong_list_1.append(str(i[0])+str(paste_str)+str(i[1:]))#Добавляем новое имя
+            wrong_list_1.append(str(i[0]).upper()+str(paste_str)+str(i[1:]))#Добавляем новое имя
         else:
             num_count = 0
             for x in str(i)[1:]:
@@ -54,7 +84,7 @@ def rename_files():
             paste = 6 - num_count        #Сколько нулей вставить
             paste_str = str('0') * paste #Строка из нулей
             wrong_list_0.append(i)       #Добавляем старое имя файла
-            wrong_list_0.append(str(i[0])+str(paste_str)+str(i[1:]))#Добавляем новое имя
+            wrong_list_0.append(str(i[0]).upper()+str(paste_str)+str(i[1:]))#Добавляем новое имя
 
     return wrong_list_1 + wrong_list_0
 
@@ -72,12 +102,39 @@ def ask_user():
         print("Please enter valid inputs")
         print(error)
         return ask_user()
+    
+def ask_user_del():
+    for name in exchange():
+        print(name)
+    check = str(input('delete files? Y/N:\n')).lower().strip()
+    try:
+        if check[0] == 'y':
+            return True
+        elif check[0] == 'n':
+            return False
+        else:
+            print('Invalid Input')
+            return ask_user()
+    except Exception as error:
+        print("Please enter valid inputs")
+        print(error)
+        return ask_user()
+    
 
+
+    
+if exchange():
+    if ask_user_del():
+        for file in exchange():
+            os.remove(file)
+            print('file', file, 'deleted')
+else:
+    print('Nothing to delete')
 
 rename_list = rename_files()
 for i in range(0, len(rename_list), 2):
     print(str(rename_list[i]), '-->', str(rename_list[i+1]))               
-if bool(rename_list) is True:   #Проверка не пустой ли список => все имена корректны            
+if len(rename_list):   #Проверка не пустой ли список => все имена корректны            
     if ask_user():
         for i in range(0, len(rename_list), 2):
             os.rename(rename_list[i], rename_list[i+1])
@@ -87,11 +144,4 @@ if bool(rename_list) is True:   #Проверка не пустой ли спи�
         print('Break')
 else:
     print('Nothing to rename')
-
-
-    
-    
-
-
-
-
+input('Press ENTER to exit')
