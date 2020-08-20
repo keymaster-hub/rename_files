@@ -1,20 +1,19 @@
 import os
 
 
-
 def exchange():
     """
-    Возвращает список имен .tif файлов для которых есть - имя-ЗАМЕНА
+    Возвращает список имен .tif файлов для которых есть - 'ЗАМЕНА'
     """
     exchange = []
     for name in os.listdir():
-        if 'ЗАМЕНА' in name and ''.join(name.split())[:-11]+'.tif' in os.listdir():
+        if 'ЗАМЕНА' in name.upper() and ''.join(name.split())[:-11]+'.tif' in os.listdir():
             exchange.append(''.join(name.split())[:-11]+'.tif')
     return exchange        
 
 def ask_user():
     print(*exchange())
-    check = str(input('Delete files? Y/N:\n')).lower().strip()
+    check = str(input('Rename files? Y/N:\n')).lower().strip()
     try:
         if check[0] == 'y':
             return True
@@ -88,21 +87,7 @@ def rename_files():
 
     return wrong_list_1 + wrong_list_0
 
-def ask_user():
-    check = str(input('Rename? Y/N:\n')).lower().strip()
-    try:
-        if check[0] == 'y':
-            return True
-        elif check[0] == 'n':
-            return False
-        else:
-            print('Invalid Input')
-            return ask_user()
-    except Exception as error:
-        print("Please enter valid inputs")
-        print(error)
-        return ask_user()
-    
+
 def ask_user_del():
     for name in exchange():
         print(name)
@@ -120,8 +105,6 @@ def ask_user_del():
         print(error)
         return ask_user()
     
-
-
     
 if exchange():
     if ask_user_del():
