@@ -1,4 +1,6 @@
 import os
+import pandas
+import shutil
 
 """
 /
@@ -27,7 +29,7 @@ def tif_files_list():
 def find_spaces():
     """
     Возвращает список файлов с пробелами или _ в имени
-    В виде списка [непраильное имя1, правильное имя1, ...]
+    В виде списка [НЕпраильное имя1, правильное имя1, ...]
     """
     wrong_names = []
     for i in tif_files_list():
@@ -40,6 +42,10 @@ def find_spaces():
     return(wrong_names)
 
 def ask_user():
+    """
+    Стандартная функция для подтверждения от пользователя
+    Возвращает True если 'y' или False если 'n'
+    """
     check = str(input('Rename files? Y/N:\n')).lower().strip()
     try:
         if check[0] == 'y':
@@ -71,7 +77,7 @@ def remove_spaces():
         else:
             print('Break')
     else:
-        print('Nothing to rename')
+        print('Nothing with spaces or _')
             
     
 def exchange():
@@ -160,7 +166,20 @@ def ask_user_del():
         return ask_user()
 
 
+def excel_search():
+    """
+    Возвращает список имен файлов которые есть в экселе
+    """
+    move_list = []
+    excel_data = pandas.read_excel('X:\_\Отчет 2020.xlsx', sheet_name='in')
+    excel_list = excel_data.to_csv(index=False)
+    for name in tif_files_list():
+        if name[:1].lower() + name[1:-4].replace('-', '/') in excel_list:
+            move_list.append(name)
+    return move_list
 
+
+    
 """
 /
 /
@@ -195,4 +214,17 @@ if len(rename_list):   #Проверка не пустой ли список => 
         print('Break')
 else:
     print('Nothing to rename')
+    
+move_list = excel_search()
+if len(move_list):
+    print('Переместить файлы:')
+    for i in move_list:
+        print(i)
+    print('В папку "Готовые"?')
+    if ask_user():
+        for i in move_list:
+            shutil.move(i, ('D:\Почта\Работа\Готовые\\' + i))
+            print(i + ' successfuly moved')
+            
+
 input('Press ENTER to exit')
