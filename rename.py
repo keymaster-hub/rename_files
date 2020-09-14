@@ -28,7 +28,7 @@ def tif_files_list():
 
 def find_spaces():
     """
-    Возвращает список файлов с пробелами или _ в имени
+    Возвращает список файлов с пробелами или _ в имени или англ "с"
     В виде списка [НЕпраильное имя1, правильное имя1, ...]
     """
     wrong_names = []
@@ -39,6 +39,9 @@ def find_spaces():
         elif '_' in str(i):
             wrong_names.append(i)
             wrong_names.append(i.replace('_', '-'))
+        elif 'c' in str(i):
+            wrong_names.append(i)
+            wrong_names.append(i.replace('c', 'с'))
     return(wrong_names)
 
 def ask_user():
@@ -171,7 +174,7 @@ def excel_search():
     Возвращает список имен файлов которые есть в экселе
     """
     move_list = []
-    excel_data = pandas.read_excel('X:\_\Отчет 2020.xlsx', sheet_name='in')
+    excel_data = pandas.read_excel('X:\_\Отчет 2020.xlsx', sheet_name = 'Принято')
     excel_list = excel_data.to_csv(index=False)
     for name in tif_files_list():
         if name[:1].lower() + name[1:-4].replace('-', '/') in excel_list:
