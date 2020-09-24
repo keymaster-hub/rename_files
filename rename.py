@@ -6,8 +6,7 @@ import shutil
 /
 /
 /
-Функции которые мне не хочется выносить в отдельный файл, потому что их
-не так много.
+Функции
 /
 /
 /
@@ -91,6 +90,8 @@ def exchange():
     for name in tif_files_list():
         if 'ЗАМЕНА' in name.upper() and ''.join(name.split())[:-11]+'.tif' in os.listdir():
             exchange.append(''.join(name.split())[:-11]+'.tif')
+        elif 'Ч' in name.upper():
+            exchange.append(name)
     return exchange        
 
 
