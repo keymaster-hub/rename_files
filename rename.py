@@ -41,6 +41,9 @@ def find_spaces():
         elif 'c' in str(i):
             wrong_names.append(i)
             wrong_names.append(i.replace('c', 'с'))
+        elif 'O' == str(i[0]).upper():
+            wrong_names.append(i)
+            wrong_names.append(i.replace(i[0], 'О'))
     return(wrong_names)
 
 def ask_user():
@@ -92,6 +95,8 @@ def exchange():
             exchange.append(''.join(name.split())[:-11]+'.tif')
         elif 'Ч' in name.upper():
             exchange.append(name)
+        elif 'О008888' in name.upper():
+            exchange.append(name)
     return exchange        
 
 
@@ -117,7 +122,7 @@ def rename_files():
     """
     wrong_list = find_wrong_names()
     wrong_list_1=[] #Список с именами на "Э" куда добавить единицы
-    wrong_list_0=[] #Список с остальными именами куда добавить нули
+    wrong_list_0=[] #Список с остальными именами куда добавить ноли
     wrong_list_spaces=[] #Список с пробелами и _ нижним подчеркиванием
     for i in wrong_list:
         if ' ' in str(i): #Если есть пробелы в имени
@@ -145,8 +150,8 @@ def rename_files():
                     num_count += 1
                 else:
                     break
-            paste = 6 - num_count        #Сколько нулей вставить
-            paste_str = str('0') * paste #Строка из нулей
+            paste = 6 - num_count        #Сколько нолей вставить
+            paste_str = str('0') * paste #Строка из нолей
             wrong_list_0.append(i)       #Добавляем старое имя файла
             wrong_list_0.append(str(i[0]).upper()+str(paste_str)+str(i[1:]))#Добавляем новое имя    
     return wrong_list_1 + wrong_list_0 + wrong_list_spaces
