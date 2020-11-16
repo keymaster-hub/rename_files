@@ -180,7 +180,7 @@ def excel_search():
     Возвращает список имен файлов которые есть в экселе
     """
     move_list = []
-    excel_data = pandas.read_excel('D:\_\Отчет 2020.xlsx', sheet_name = 'Принято')
+    excel_data = pandas.read_excel('D:\_\Отчет 2020.xlsx', sheet_name = 'Отгружено')
     excel_list = excel_data.to_csv(index=False)
     for name in tif_files_list():
         if name[:1].lower() + name[1:-4].replace('-', '/') in excel_list:
@@ -233,7 +233,7 @@ if len(move_list):
     if ask_user():
         try:
             for i in move_list:
-                shutil.move(i, ('D:\Почта\Работа\Гоhтовые\\' + i))
+                shutil.move(i, ('D:\Почта\Работа\Готовые\\' + i))
                 print(i + ' successfuly moved')
             
         except Exception as error:
