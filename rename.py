@@ -110,7 +110,7 @@ def find_wrong_names():
     #Создаем список файлов где после 1 символа меньше 6 цифр или 1 символ lower case
     for i in tif_list:
         if (str(i)[1:7]).isdigit() is False: #Меньше 6 цифр - в список
-            wrong_names.insert(pos, i)
+            wrong_names.append(i)
         elif (str(i)[0]).isupper() is False: #1 символ нижний регистр - в список
             wrong_names.append(i)
     return wrong_names
@@ -224,7 +224,7 @@ if len(rename_list):   #Проверка не пустой ли список => 
 else:
     print('Nothing to rename')
     
-move_list = excel_search()
+"""move_list = excel_search()
 if len(move_list):
     print('Переместить файлы:')
     for i in move_list:
@@ -241,3 +241,4 @@ if len(move_list):
             print(error)
             exit
 input('Press ENTER to exit')
+"""
